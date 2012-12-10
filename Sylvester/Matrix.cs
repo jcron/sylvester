@@ -1,6 +1,4 @@
 ﻿
-using System;
-
 namespace Sylvester
 {
     public class Matrix
@@ -8,6 +6,7 @@ namespace Sylvester
         private readonly double[,] _matrix;
         private readonly int _columns;
         private readonly int _rows;
+
         public Matrix(int rows, int columns)
         {
             _matrix = new double[rows, columns];
@@ -20,6 +19,13 @@ namespace Sylvester
                     _matrix[i, j] = 0;
                 }
             }
+        }
+
+        public Matrix(double[,] matrix)
+        {
+            _rows = matrix.GetLength(0);
+            _columns = matrix.GetLength(1);
+            _matrix = matrix;
         }
         
         public double GetElement(int row, int column)
@@ -98,8 +104,6 @@ namespace Sylvester
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
             return obj.GetType() == typeof (Matrix) && Equals((Matrix) obj);
         }
 

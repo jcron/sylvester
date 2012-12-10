@@ -7,11 +7,19 @@ namespace SylvesterTests
     public class MatrixTests
     {
         [Test]
-        public void MatrixInitializesToZerosByDefault()
+        public void InitializesToZerosByDefault()
         {
             var m = new Matrix(2, 2);
             Assert.That(m.GetRow(0), Is.EqualTo(new double[] { 0, 0 }));
             Assert.That(m.GetRow(1), Is.EqualTo(new double[] { 0, 0 }));
+        }
+
+        [Test]
+        public void InitializeWithInitialValues()
+        {
+            var m = new Matrix(new double[,] { { 0, 1, 2 }, { 3, 4, 5 } });
+            Assert.That(m.GetRow(0), Is.EqualTo(new double[] { 0, 1, 2 }));
+            Assert.That(m.GetRow(1), Is.EqualTo(new double[] { 3, 4, 5 }));
         }
 
         [Test]
