@@ -111,7 +111,58 @@ namespace SylvesterTests
             var m2 = new Matrix(2, 2);
             m2.SetRow(0, new double[] { 0, 0 });
             m2.SetRow(1, new double[] { 1, 0 });
-            Assert.False(m2.IsZero());   
+            Assert.False(m2.IsZero());
+        }
+
+        [Test]
+        public void DiagonalMatrix()
+        {
+            var m1 = new Matrix(2, 2);
+            m1.SetRow(0, new double[] { 1, 0 });
+            m1.SetRow(1, new double[] { 0, 0 });
+            Assert.True(m1.IsDiagonal());
+
+            var m2 = new Matrix(2, 2);
+            m2.SetRow(0, new double[] { 0, 0 });
+            m2.SetRow(1, new double[] { 1, 0 });
+            Assert.False(m2.IsDiagonal());
+        }
+
+        [Test]
+        public void IdentityMatrix()
+        {
+            var m1 = new Matrix(2, 2);
+            m1.SetRow(0, new double[] { 1, 0 });
+            m1.SetRow(1, new double[] { 0, 1 });
+            Assert.True(m1.IsDiagonal());
+            Assert.True(m1.IsIdentity());
+
+            var m2 = new Matrix(2, 2);
+            m2.SetRow(0, new double[] { 0, 1 });
+            m2.SetRow(1, new double[] { 1, 0 });
+            Assert.False(m2.IsIdentity());
+        }
+
+        [Test]
+        [ExpectedException(typeof(System.Exception), ExpectedMessage = "Create better exception")]
+        public void CannotAddIfRowsAndColumnsDoNotMatch()
+        {
+            var m1 = new Matrix(2, 2);
+            var m2 = new Matrix(2, 3);
+            var m3 = m1 + m2;
+        }
+
+        [Test]
+        public void AddingTwoMatricesTogether()
+        {
+            var m1 = new Matrix(new double[,] { { 0, 1, 2 },
+                                                { 3, 4, 5 } });
+            var m2 = new Matrix(new double[,] { { 0, 1, 2 },
+                                                { 3, 4, 5 } });
+            var addedMatrix = new Matrix(new double[,] { { 0, 2, 4 },
+                                                         { 6, 8, 10 } });
+
+            Assert.That(m1 + m2, Is.EqualTo(addedMatrix));
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Sylvester
 {
     public class Matrix
@@ -38,13 +40,6 @@ namespace Sylvester
             _matrix[row, column] = value;
         }
 
-        public void SetRow(int row, double[] rowValue)
-        {
-            for (var i = 0; i < _columns; i++)
-            {
-                _matrix[row, i] = rowValue[i];
-            }
-        }
         public double[] GetRow(int rowIndex)
         {
             var row = new double[_columns];
@@ -55,11 +50,11 @@ namespace Sylvester
             return row;
         }
 
-        public void SetColumn(int column, double[] columnValue)
+        public void SetRow(int row, double[] rowValue)
         {
-            for (var i = 0; i < _rows; i++)
+            for (var i = 0; i < _columns; i++)
             {
-                _matrix[i, column] = columnValue[i];
+                _matrix[row, i] = rowValue[i];
             }
         }
 
@@ -71,6 +66,55 @@ namespace Sylvester
                 row[i] = _matrix[i, columnIndex];
             }
             return row;
+        }
+
+        public void SetColumn(int column, double[] columnValue)
+        {
+            for (var i = 0; i < _rows; i++)
+            {
+                _matrix[i, column] = columnValue[i];
+            }
+        }
+        
+        public bool IsSquare()
+        {
+            return _rows == _columns;
+        }
+
+        public bool IsZero()
+        {
+            for (var i = 0; i < _rows; i++)
+                for (var j = 0; j < _columns; j++)
+                    if (_matrix[i, j] != 0)
+                        return false;
+            return true;
+        }
+
+        public bool IsDiagonal()
+        {
+            for (var i = 0; i < _rows; i++)
+                for (var j = 0; j < _columns; j++)
+                    if (i != j && _matrix[i, j] != 0)
+                        return false;
+            return true;
+        }
+
+        public bool IsIdentity()
+        {
+            for (var i = 0; i < _rows; i++)
+                for (var j = 0; j < _columns; j++)
+                    if (i == j && _matrix[i, j] != 1)
+                        return false;
+            return IsDiagonal();
+        }
+
+        public static Matrix operator +(Matrix lhs, Matrix rhs)
+        {
+            if (lhs._rows != rhs._rows || lhs._columns != rhs._columns)
+            {
+                throw new System.Exception("Create better exception");
+            }
+            return new Matrix(null);
         }
 
         public static bool operator ==(Matrix lhs, Matrix rhs)
@@ -89,7 +133,7 @@ namespace Sylvester
             if (ReferenceEquals(this, other)) return true;
             if (other._columns == _columns && other._rows == _rows)
             {
-                for(var i=0; i < _rows; i++)
+                for (var i = 0; i < _rows; i++)
                 {
                     for (var j = 0; j < _columns; j++)
                     {
@@ -104,7 +148,7 @@ namespace Sylvester
 
         public override bool Equals(object obj)
         {
-            return obj.GetType() == typeof (Matrix) && Equals((Matrix) obj);
+            return obj.GetType() == typeof(Matrix) && Equals((Matrix)obj);
         }
 
         // Re-sharper generated
@@ -113,24 +157,10 @@ namespace Sylvester
             unchecked
             {
                 var result = (_matrix != null ? _matrix.GetHashCode() : 0);
-                result = (result*397) ^ _columns;
-                result = (result*397) ^ _rows;
+                result = (result * 397) ^ _columns;
+                result = (result * 397) ^ _rows;
                 return result;
             }
-        }
-
-        public bool IsSquare()
-        {
-            return _rows == _columns;
-        }
-
-        public bool IsZero()
-        {
-            for (var i = 0; i < _rows; i++)
-                for (var j = 0; j < _columns; j++)
-                    if (_matrix[i, j] != 0)
-                        return false;
-            return true;
         }
     }
 }
