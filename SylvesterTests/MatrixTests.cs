@@ -81,5 +81,29 @@ namespace SylvesterTests
 
             Assert.True(m1 != m2);
         }
+
+        [Test]
+        public void SquareMatrix()
+        {
+            var m1 = new Matrix(2, 2);
+            Assert.True(m1.IsSquare());
+
+            var m2 = new Matrix(2, 3);
+            Assert.False(m2.IsSquare());
+        }
+
+        [Test]
+        public void ZeroMatrix()
+        {
+            var m1 = new Matrix(2, 2);
+            m1.SetRow(0, new double[] { 0, 0 });
+            m1.SetRow(1, new double[] { 0, 0 });
+            Assert.True(m1.IsZero());
+
+            var m2 = new Matrix(2, 2);
+            m2.SetRow(0, new double[] { 0, 0 });
+            m2.SetRow(1, new double[] { 1, 0 });
+            Assert.False(m2.IsZero());   
+        }
     }
 }

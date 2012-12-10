@@ -1,11 +1,13 @@
 ﻿
+using System;
+
 namespace Sylvester
 {
     public class Matrix
     {
-        private double[,] _matrix;
-        private int _columns;
-        private int _rows;
+        private readonly double[,] _matrix;
+        private readonly int _columns;
+        private readonly int _rows;
         public Matrix(int rows, int columns)
         {
             _matrix = new double[rows, columns];
@@ -98,8 +100,7 @@ namespace Sylvester
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (Matrix)) return false;
-            return Equals((Matrix) obj);
+            return obj.GetType() == typeof (Matrix) && Equals((Matrix) obj);
         }
 
         // Re-sharper generated
@@ -112,6 +113,20 @@ namespace Sylvester
                 result = (result*397) ^ _rows;
                 return result;
             }
+        }
+
+        public bool IsSquare()
+        {
+            return _rows == _columns;
+        }
+
+        public bool IsZero()
+        {
+            for (var i = 0; i < _rows; i++)
+                for (var j = 0; j < _columns; j++)
+                    if (_matrix[i, j] != 0)
+                        return false;
+            return true;
         }
     }
 }
