@@ -1,0 +1,15 @@
+*.ReSharper.*
+_ReSharper.*
+*.user
+*.suo
+Data
+obj
+UnitTestResults.xml
+*.cache
+Backup/*
+_UpgradeReport_Files/*
+UpgradeLog.XML
+**.dotCover
+*.dll
+*.pdb
+
