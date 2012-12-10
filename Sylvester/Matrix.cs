@@ -1,6 +1,4 @@
 ﻿
-using System;
-
 namespace Sylvester
 {
     public class Matrix
@@ -9,9 +7,9 @@ namespace Sylvester
         public Matrix(int rows, int columns)
         {
             _matrix = new double[rows,columns];
-            for (int i = 0; i < rows; i++)
+            for (var i = 0; i < rows; i++)
             {
-                for (int j = 0; j < columns; j++)
+                for (var j = 0; j < columns; j++)
                 {
                     _matrix[i, j] = 0;
                 }

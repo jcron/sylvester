@@ -10,6 +10,6 @@ Backup/*
 _UpgradeReport_Files/*
 UpgradeLog.XML
 **.dotCover
-*.dll
-*.pdb
-
+*/[Rr]elease
+*/[Dd]ebug
+*/[Bb]in
