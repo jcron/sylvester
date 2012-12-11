@@ -69,38 +69,6 @@ namespace Sylvester
                 _matrix[i, column] = columnValue[i];
         }
         
-        public bool IsSquare()
-        {
-            return _rows == _columns;
-        }
-
-        public bool IsZero()
-        {
-            for (var i = 0; i < _rows; i++)
-                for (var j = 0; j < _columns; j++)
-                    if (_matrix[i, j] != 0)
-                        return false;
-            return true;
-        }
-
-        public bool IsDiagonal()
-        {
-            for (var i = 0; i < _rows; i++)
-                for (var j = 0; j < _columns; j++)
-                    if (i != j && _matrix[i, j] != 0)
-                        return false;
-            return true;
-        }
-
-        public bool IsIdentity()
-        {
-            for (var i = 0; i < _rows; i++)
-                for (var j = 0; j < _columns; j++)
-                    if (i == j && _matrix[i, j] != 1)
-                        return false;
-            return IsDiagonal();
-        }
-
         public static Matrix operator +(Matrix lhs, Matrix rhs)
         {
             if (!AreSameSize(lhs, rhs))
@@ -177,14 +145,7 @@ namespace Sylvester
 
         public static Matrix operator |(Matrix lhs, Matrix rhs)
         {
-            if (!lhs.IsBinary() || !rhs.IsBinary())
-            {
-                throw new InvalidOperationException("The matrices must be binary in order to perform this operation.");
-            }
-            if (!AreSameSize(lhs, rhs))
-            {
-                throw new InvalidOperationException("The rows and columns must match in order to perform this operation.");
-            }
+            BooleanPrerequisites(lhs, rhs);
             var m = new Matrix(lhs._rows, lhs._columns);
             for (var i = 0; i < m._rows; i++)
                 for (var j = 0; j < m._columns; j++ )
@@ -194,7 +155,7 @@ namespace Sylvester
                     }
             return m;
         }
-
+        
         public Matrix Join(Matrix rhs)
         {
             return this | rhs;
@@ -202,14 +163,7 @@ namespace Sylvester
 
         public static Matrix operator &(Matrix lhs, Matrix rhs)
         {
-            if (!lhs.IsBinary() || !rhs.IsBinary())
-            {
-                throw new InvalidOperationException("The matrices must be binary in order to perform this operation.");
-            }
-            if (!AreSameSize(lhs, rhs))
-            {
-                throw new InvalidOperationException("The rows and columns must match in order to perform this operation.");
-            }
+            BooleanPrerequisites(lhs, rhs);
             var m = new Matrix(lhs._rows, lhs._columns);
             for (var i = 0; i < m._rows; i++)
                 for (var j = 0; j < m._columns; j++)
@@ -245,7 +199,6 @@ namespace Sylvester
         {
             return obj.GetType() == typeof(Matrix) && Equals((Matrix)obj);
         }
-
         // Re-sharper generated
         public override int GetHashCode()
         {
@@ -282,9 +235,50 @@ namespace Sylvester
             return m;
         }
 
+        public bool IsSquare()
+        {
+            return _rows == _columns;
+        }
+
+        public bool IsZero()
+        {
+            for (var i = 0; i < _rows; i++)
+                for (var j = 0; j < _columns; j++)
+                    if (_matrix[i, j] != 0)
+                        return false;
+            return true;
+        }
+
+        public bool IsDiagonal()
+        {
+            for (var i = 0; i < _rows; i++)
+                for (var j = 0; j < _columns; j++)
+                    if (i != j && _matrix[i, j] != 0)
+                        return false;
+            return true;
+        }
+
+        public bool IsIdentity()
+        {
+            for (var i = 0; i < _rows; i++)
+                for (var j = 0; j < _columns; j++)
+                    if (i == j && _matrix[i, j] != 1)
+                        return false;
+            return IsDiagonal();
+        }
+
         public bool IsSymmetric()
         {
             return IsSquare() && this == Transpose();
+        }
+
+        public bool IsBinary()
+        {
+            for (var i = 0; i < _rows; i++)
+                for (var j = 0; j < _columns; j++)
+                    if (GetElement(i, j) != 1 && GetElement(i, j) != 0)
+                        return false;
+            return true;
         }
 
         private static bool AreSameSize(Matrix lhs, Matrix rhs)
@@ -297,13 +291,16 @@ namespace Sylvester
             return (lhs._columns != rhs._rows);
         }
 
-        public bool IsBinary()
+        private static void BooleanPrerequisites(Matrix lhs, Matrix rhs)
         {
-            for (var i = 0; i < _rows; i++)
-                for (var j = 0; j < _columns; j++)
-                    if (GetElement(i, j) != 1 && GetElement(i, j) != 0)
-                        return false;
-            return true;
+            if (!lhs.IsBinary() || !rhs.IsBinary())
+            {
+                throw new InvalidOperationException("The matrices must be binary in order to perform this operation.");
+            }
+            if (!AreSameSize(lhs, rhs))
+            {
+                throw new InvalidOperationException("The rows and columns must match in order to perform this operation.");
+            }
         }
     }
 }
