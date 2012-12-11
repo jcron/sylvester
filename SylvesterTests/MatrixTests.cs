@@ -144,7 +144,7 @@ namespace SylvesterTests
         }
 
         [Test]
-        [ExpectedException(typeof(System.Exception), ExpectedMessage = "Create better exception")]
+        [ExpectedException(typeof(System.InvalidOperationException), ExpectedMessage = "The rows and columns must match in order to add two matrices together.")]
         public void CannotAddIfRowsAndColumnsDoNotMatch()
         {
             var m1 = new Matrix(2, 2);
@@ -161,8 +161,8 @@ namespace SylvesterTests
                                                 { 3, 4, 5 } });
             var addedMatrix = new Matrix(new double[,] { { 0, 2, 4 },
                                                          { 6, 8, 10 } });
-
-            Assert.That(m1 + m2, Is.EqualTo(addedMatrix));
+            var both = m1 + m2;
+            Assert.That(both, Is.EqualTo(addedMatrix));
         }
     }
 }

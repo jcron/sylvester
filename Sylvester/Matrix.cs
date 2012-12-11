@@ -1,7 +1,4 @@
-﻿
-using System;
-
-namespace Sylvester
+﻿namespace Sylvester
 {
     public class Matrix
     {
@@ -112,9 +109,13 @@ namespace Sylvester
         {
             if (lhs._rows != rhs._rows || lhs._columns != rhs._columns)
             {
-                throw new System.Exception("Create better exception");
+                throw new System.InvalidOperationException("The rows and columns must match in order to add two matrices together.");
             }
-            return new Matrix(null);
+            var m = new Matrix(lhs._rows, lhs._columns);
+            for (var i = 0; i < lhs._rows; i++)
+                for (var j = 0; j < lhs._columns; j++)
+                    m.SetElement(i,j, lhs.GetElement(i,j) + rhs.GetElement(i,j));
+            return m;
         }
 
         public static bool operator ==(Matrix lhs, Matrix rhs)
