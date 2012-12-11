@@ -329,5 +329,119 @@ namespace SylvesterTests
                                    });
             Assert.True(m.IsBinary());
         }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "The matrices must be binary in order to perform this operation.")]
+        public void CannotOrIfMatricesAreNotBinary()
+        {
+            var m1 = new Matrix(new double[,]
+                                   {
+                                       {1, 0 },
+                                       {0, 1 }
+                                   });
+            var m2 = new Matrix(new double[,]
+                                   {
+                                       {1, 0 },
+                                       {2, 1 }
+                                   });
+            var m3 = m1 | m2;
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "The rows and columns must match in order to perform this operation.")]
+        public void CannotOrIfMatricesAreNotSameSize()
+        {
+            var m1 = new Matrix(new double[,]
+                                   {
+                                       {1, 0 },
+                                       {0, 1 }
+                                   });
+            var m2 = new Matrix(new double[,]
+                                   {
+                                       {1, 0, 1 },
+                                       {0, 1, 0 }
+                                   });
+            var m3 = m1 | m2;
+        }
+
+        [Test]
+        public void BooleanJoin()
+        {
+            var m1 = new Matrix(new double[,]
+                                   {
+                                       {1, 0 },
+                                       {0, 1 }
+                                   });
+            var m2 = new Matrix(new double[,]
+                                   {
+                                       {1, 1 },
+                                       {0, 0 }
+                                   });
+
+            var resultMatrix = new Matrix(new double[,]
+                                              {
+                                                  { 1, 1 },
+                                                  { 0, 1 }
+                                              });
+            Assert.That(m1 | m2, Is.EqualTo(resultMatrix));
+            Assert.That(m1.Join(m2), Is.EqualTo(resultMatrix));
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "The matrices must be binary in order to perform this operation.")]
+        public void CannotAndIfMatricesAreNotBinary()
+        {
+            var m1 = new Matrix(new double[,]
+                                   {
+                                       {1, 0 },
+                                       {0, 1 }
+                                   });
+            var m2 = new Matrix(new double[,]
+                                   {
+                                       {1, 0 },
+                                       {2, 1 }
+                                   });
+            var m3 = m1 & m2;
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "The rows and columns must match in order to perform this operation.")]
+        public void CannotAndIfMatricesAreNotSameSize()
+        {
+            var m1 = new Matrix(new double[,]
+                                   {
+                                       {1, 0 },
+                                       {0, 1 }
+                                   });
+            var m2 = new Matrix(new double[,]
+                                   {
+                                       {1, 0, 1 },
+                                       {0, 1, 0 }
+                                   });
+            var m3 = m1 & m2;
+        }
+
+        [Test]
+        public void BooleanMeet()
+        {
+            var m1 = new Matrix(new double[,]
+                                   {
+                                       {1, 0 },
+                                       {0, 1 }
+                                   });
+            var m2 = new Matrix(new double[,]
+                                   {
+                                       {1, 1 },
+                                       {0, 0 }
+                                   });
+
+            var resultMatrix = new Matrix(new double[,]
+                                              {
+                                                  { 1, 0 },
+                                                  { 1, 0 }
+                                              });
+            Assert.That(m1 & m2, Is.EqualTo(resultMatrix));
+            Assert.That(m1.Meet(m2), Is.EqualTo(resultMatrix));
+        }
     }
 }

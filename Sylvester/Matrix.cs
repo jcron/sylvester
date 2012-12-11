@@ -175,6 +175,57 @@ namespace Sylvester
             return !lhs.Equals(rhs);
         }
 
+        public static Matrix operator |(Matrix lhs, Matrix rhs)
+        {
+            if (!lhs.IsBinary() || !rhs.IsBinary())
+            {
+                throw new InvalidOperationException("The matrices must be binary in order to perform this operation.");
+            }
+            if (!AreSameSize(lhs, rhs))
+            {
+                throw new InvalidOperationException("The rows and columns must match in order to perform this operation.");
+            }
+            var m = new Matrix(lhs._rows, lhs._columns);
+            for (var i = 0; i < m._rows; i++)
+                for (var j = 0; j < m._columns; j++ )
+                    if (lhs.GetElement(i,j) == 1 || rhs.GetElement(i,j) == 1)
+                    {
+                        m.SetElement(i,j,1);
+                    }
+            return m;
+        }
+
+        public Matrix Join(Matrix rhs)
+        {
+            return this | rhs;
+        }
+
+        public static Matrix operator &(Matrix lhs, Matrix rhs)
+        {
+            if (!lhs.IsBinary() || !rhs.IsBinary())
+            {
+                throw new InvalidOperationException("The matrices must be binary in order to perform this operation.");
+            }
+            if (!AreSameSize(lhs, rhs))
+            {
+                throw new InvalidOperationException("The rows and columns must match in order to perform this operation.");
+            }
+            var m = new Matrix(lhs._rows, lhs._columns);
+            for (var i = 0; i < m._rows; i++)
+                for (var j = 0; j < m._columns; j++)
+                    if ((lhs.GetElement(i, j) == 0 && rhs.GetElement(i, j) == 0) ||
+                        (lhs.GetElement(i, j) == 1 && rhs.GetElement(i, j) == 1))
+                    {
+                        m.SetElement(i, j, 1);
+                    }
+            return m;
+        }
+        
+        public Matrix Meet(Matrix rhs)
+        {
+            return this & rhs;
+        }
+
         public bool Equals(Matrix other)
         {
             if (ReferenceEquals(null, other)) return false;
