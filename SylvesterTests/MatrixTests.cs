@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Sylvester;
 
 namespace SylvesterTests
@@ -144,7 +145,7 @@ namespace SylvesterTests
         }
 
         [Test]
-        [ExpectedException(typeof(System.InvalidOperationException), ExpectedMessage = "The rows and columns must match in order to add two matrices together.")]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "The rows and columns must match in order to add two matrices together.")]
         public void CannotAddIfRowsAndColumnsDoNotMatch()
         {
             var m1 = new Matrix(2, 2);
@@ -159,10 +160,76 @@ namespace SylvesterTests
                                                 { 3, 4, 5 } });
             var m2 = new Matrix(new double[,] { { 0, 1, 2 },
                                                 { 3, 4, 5 } });
-            var addedMatrix = new Matrix(new double[,] { { 0, 2, 4 },
+            var resultMatrix = new Matrix(new double[,] { { 0, 2, 4 },
                                                          { 6, 8, 10 } });
-            var both = m1 + m2;
-            Assert.That(both, Is.EqualTo(addedMatrix));
+
+            Assert.That(m1 + m2, Is.EqualTo(resultMatrix));
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "The rows and columns must match in order to subtract two matrices.")]
+        public void CannotSubtractIfRowsAndColumnsDoNotMatch()
+        {
+            var m1 = new Matrix(2, 2);
+            var m2 = new Matrix(2, 3);
+            var m3 = m1 - m2;
+        }
+
+        [Test]
+        public void SubtractingTwoMatrices()
+        {
+            var m1 = new Matrix(new double[,] { { 6, 5, 4 },
+                                                { 3, 2, 1 } });
+            var m2 = new Matrix(new double[,] { { 0, 1, 2 },
+                                                { 3, 4, 5 } });
+            var resultMatrix = new Matrix(new double[,] { { 6, 4, 2 },
+                                                         { 0, -2, -4 } });
+
+            Assert.That(m1 - m2, Is.EqualTo(resultMatrix));
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "The columns of the lhs Matrix must match the rows of the rhs Matrix in order to perform multiplication on matrices.")]
+        public void CannotMultiplyIfColumnsOfADontMatchRowsOfB()
+        {
+            var m1 = new Matrix(2, 5);
+            var m2 = new Matrix(7, 2);
+            var m3 = m1 * m2;
+        }
+
+        [Test]
+        public void MultiplyResultMatrixIsSizeOfRowsOfAAndColumnsOfB()
+        {
+            var m1 = new Matrix(5, 2);
+            var m2 = new Matrix(2, 7);
+            var m3 = m1 * m2;
+            Assert.That(m3.GetSize(), Is.EqualTo(new[] {5,7}));
+        }
+
+        [Test]
+        public void MultiplyingTwoMatrices()
+        {
+            var m1 = new Matrix(new double[,] { { 6, 5, 4 },
+                                                { 3, 2, 1 } });
+            var m2 = new Matrix(new double[,] { { 1, 1, 2 },
+                                                { 3, 4, 5 },
+                                                { 6, 7, 8 } });
+            var resultMatrix = new Matrix(new double[,] { { 45, 54, 69 },
+                                                          { 15, 18, 24 } });
+           
+            Assert.That(m1 * m2, Is.EqualTo(resultMatrix));
+        }
+
+        [Test]
+        public void MultiplyingMatrixByNumber()
+        {
+            var m1 = new Matrix(new double[,] { { 6, 5, 4 },
+                                                { 3, 2, 1 } });
+            var resultMatrix = new Matrix(new double[,] { { -6, -5, -4 },
+                                                          { -3, -2, -1 } });
+
+            Assert.That(-1 * m1, Is.EqualTo(resultMatrix));
+            Assert.That(m1 * -1, Is.EqualTo(resultMatrix));
         }
     }
 }
