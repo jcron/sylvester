@@ -245,5 +245,14 @@ namespace Sylvester
         {
             return (lhs._columns != rhs._rows);
         }
+
+        public bool IsBinary()
+        {
+            for (var i = 0; i < _rows; i++)
+                for (var j = 0; j < _columns; j++)
+                    if (GetElement(i, j) != 1 && GetElement(i, j) != 0)
+                        return false;
+            return true;
+        }
     }
 }

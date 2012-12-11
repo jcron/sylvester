@@ -307,5 +307,27 @@ namespace SylvesterTests
                                    });
             Assert.True(m.IsSymmetric());
         }
+
+        [Test]
+        public void NotBinaryWithValuesOtherThanOneOrZero()
+        {
+            var m = new Matrix(new double[,]
+                                   {
+                                       {1, 0 },
+                                       {2, 1 }
+                                   });
+            Assert.False(m.IsBinary());
+        }
+
+        [Test]
+        public void BinaryHasOnlyOnesAndZeros()
+        {
+            var m = new Matrix(new double[,]
+                                   {
+                                       {1, 0 },
+                                       {0, 1 }
+                                   });
+            Assert.True(m.IsBinary());
+        }
     }
 }
