@@ -443,5 +443,44 @@ namespace SylvesterTests
             Assert.That(m1 & m2, Is.EqualTo(resultMatrix));
             Assert.That(m1.Meet(m2), Is.EqualTo(resultMatrix));
         }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "The columns of the lhs Matrix must match the rows of the rhs Matrix in order to perform this operation.")]
+        public void CannotPerformBooleanProductIfRowsOfADoNoMatchColumnsOfB()
+        {
+            var m1 = new Matrix(new double[,]
+                                    {
+                                        {1, 1, 1},
+                                        {4, 0, 2}
+                                    });
+            var m2 = new Matrix(new double[,]
+                                    {
+                                        {1, 0},
+                                        {0, 1}
+                                    });
+            var m3 = m1.Product(m2);
+        }
+
+        [Test]
+        public void BooleanProduct()
+        {
+            var m1 = new Matrix(new double[,]
+                                    {
+                                        {0, 0, 1},
+                                        {1, 0, 1}
+                                    });
+            var m2 = new Matrix(new double[,]
+                                    {
+                                        {1, 0, 1},
+                                        {0, 1, 1},
+                                        {0, 0, 0}
+                                    });
+            var resultMatrix = new Matrix(new double[,]
+                                              {
+                                                  {0, 0, 0},
+                                                  {1, 0, 1}
+                                              });
+            Assert.That(m1.Product(m2), Is.EqualTo(resultMatrix));
+        }
     }
 }

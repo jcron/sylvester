@@ -235,6 +235,15 @@ namespace Sylvester
             return m;
         }
 
+        public Matrix Product(Matrix rhs)
+        {
+            if (CannotMultiply(this, rhs))
+            {
+                throw new InvalidOperationException("The columns of the lhs Matrix must match the rows of the rhs Matrix in order to perform this operation.");
+            }
+            return new Matrix(0, 0);
+        }
+
         public bool IsSquare()
         {
             return _rows == _columns;
