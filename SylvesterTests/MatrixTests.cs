@@ -18,7 +18,11 @@ namespace SylvesterTests
         [Test]
         public void InitializeWithInitialValues()
         {
-            var m = new Matrix(new double[,] { { 0, 1, 2 }, { 3, 4, 5 } });
+            var m = new Matrix(new double[,]
+                                   {
+                                       {0, 1, 2},
+                                       {3, 4, 5}
+                                   });
             Assert.That(m.GetRow(0), Is.EqualTo(new double[] { 0, 1, 2 }));
             Assert.That(m.GetRow(1), Is.EqualTo(new double[] { 3, 4, 5 }));
         }
@@ -156,12 +160,21 @@ namespace SylvesterTests
         [Test]
         public void AddingTwoMatricesTogether()
         {
-            var m1 = new Matrix(new double[,] { { 0, 1, 2 },
-                                                { 3, 4, 5 } });
-            var m2 = new Matrix(new double[,] { { 0, 1, 2 },
-                                                { 3, 4, 5 } });
-            var resultMatrix = new Matrix(new double[,] { { 0, 2, 4 },
-                                                         { 6, 8, 10 } });
+            var m1 = new Matrix(new double[,]
+                                    {
+                                        {0, 1, 2},
+                                        {3, 4, 5}
+                                    });
+            var m2 = new Matrix(new double[,]
+                                    {
+                                        {0, 1, 2},
+                                        {3, 4, 5}
+                                    });
+            var resultMatrix = new Matrix(new double[,]
+                                              {
+                                                  {0, 2, 4},
+                                                  {6, 8, 10}
+                                              });
 
             Assert.That(m1 + m2, Is.EqualTo(resultMatrix));
         }
@@ -178,12 +191,21 @@ namespace SylvesterTests
         [Test]
         public void SubtractingTwoMatrices()
         {
-            var m1 = new Matrix(new double[,] { { 6, 5, 4 },
-                                                { 3, 2, 1 } });
-            var m2 = new Matrix(new double[,] { { 0, 1, 2 },
-                                                { 3, 4, 5 } });
-            var resultMatrix = new Matrix(new double[,] { { 6, 4, 2 },
-                                                         { 0, -2, -4 } });
+            var m1 = new Matrix(new double[,]
+                                    {
+                                        {6, 5, 4},
+                                        {3, 2, 1}
+                                    });
+            var m2 = new Matrix(new double[,]
+                                    {
+                                        {0, 1, 2},
+                                        {3, 4, 5}
+                                    });
+            var resultMatrix = new Matrix(new double[,]
+                                              {
+                                                  {6, 4, 2},
+                                                  {0, -2, -4}
+                                              });
 
             Assert.That(m1 - m2, Is.EqualTo(resultMatrix));
         }
@@ -209,13 +231,22 @@ namespace SylvesterTests
         [Test]
         public void MultiplyingTwoMatrices()
         {
-            var m1 = new Matrix(new double[,] { { 6, 5, 4 },
-                                                { 3, 2, 1 } });
-            var m2 = new Matrix(new double[,] { { 1, 1, 2 },
-                                                { 3, 4, 5 },
-                                                { 6, 7, 8 } });
-            var resultMatrix = new Matrix(new double[,] { { 45, 54, 69 },
-                                                          { 15, 18, 24 } });
+            var m1 = new Matrix(new double[,]
+                                    {
+                                        {6, 5, 4},
+                                        {3, 2, 1}
+                                    });
+            var m2 = new Matrix(new double[,]
+                                    {
+                                        {1, 1, 2},
+                                        {3, 4, 5},
+                                        {6, 7, 8}
+                                    });
+            var resultMatrix = new Matrix(new double[,]
+                                              {
+                                                  {45, 54, 69},
+                                                  {15, 18, 24}
+                                              });
            
             Assert.That(m1 * m2, Is.EqualTo(resultMatrix));
         }
@@ -223,13 +254,58 @@ namespace SylvesterTests
         [Test]
         public void MultiplyingMatrixByNumber()
         {
-            var m1 = new Matrix(new double[,] { { 6, 5, 4 },
-                                                { 3, 2, 1 } });
-            var resultMatrix = new Matrix(new double[,] { { -6, -5, -4 },
-                                                          { -3, -2, -1 } });
+            var m1 = new Matrix(new double[,]
+                                    {
+                                        {6, 5, 4},
+                                        {3, 2, 1}
+                                    });
+            var resultMatrix = new Matrix(new double[,]
+                                              {
+                                                  {-6, -5, -4},
+                                                  {-3, -2, -1}
+                                              });
 
             Assert.That(-1 * m1, Is.EqualTo(resultMatrix));
             Assert.That(m1 * -1, Is.EqualTo(resultMatrix));
+        }
+
+        [Test]
+        public void Transpose()
+        {
+            var m = new Matrix(new double[,]
+                                   {
+                                       {6, 5, 4},
+                                       {3, 2, 1}
+                                   });
+            var resultMatrix = new Matrix(new double[,]
+                                              {
+                                                  {6, 3},
+                                                  {5, 2},
+                                                  {4, 1}
+                                              });
+            Assert.That(m.Transpose(), Is.EqualTo(resultMatrix));
+        }
+
+        [Test]
+        public void NonSquareMatricesAreNotSymmetric()
+        {
+            var m = new Matrix(new double[,]
+                                   {
+                                       {6, 5, 4},
+                                       {3, 2, 1}
+                                   });
+            Assert.False(m.IsSymmetric());
+        }
+
+        [Test]
+        public void IsSymmetric()
+        {
+            var m = new Matrix(new double[,]
+                                   {
+                                       {1, 3 },
+                                       {3, 2 }
+                                   });
+            Assert.True(m.IsSymmetric());
         }
     }
 }

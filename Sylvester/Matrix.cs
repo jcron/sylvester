@@ -221,6 +221,21 @@ namespace Sylvester
             return m;
         }
 
+        public Matrix Transpose()
+        {
+            var m = new Matrix(_columns, _rows);
+            for (var i = 0; i < _rows; i++)
+            {
+                m.SetColumn(i, GetRow(i));
+            }
+            return m;
+        }
+
+        public bool IsSymmetric()
+        {
+            return IsSquare() && this == Transpose();
+        }
+
         private static bool AreSameSize(Matrix lhs, Matrix rhs)
         {
             return (lhs._rows == rhs._rows && lhs._columns == rhs._columns);
