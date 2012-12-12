@@ -241,7 +241,22 @@ namespace Sylvester
             {
                 throw new InvalidOperationException("The columns of the lhs Matrix must match the rows of the rhs Matrix in order to perform this operation.");
             }
-            return new Matrix(0, 0);
+            var m = new Matrix(_rows, rhs._columns);
+            for (var i = 0; i < _rows; i++)
+            {
+                for (var j = 0; j < rhs._columns; j++)
+                {
+                    var row = GetRow(i);
+                    var column = rhs.GetColumn(j);
+                    var element = 0;
+                    for (var index = 0; index < row.Length; index++)
+                    {
+                        element |= (int)row[index] & (int)column[index];
+                    }
+                    m.SetElement(i, j, element);
+                }
+            }
+            return m;
         }
 
         public bool IsSquare()
