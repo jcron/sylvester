@@ -5,9 +5,9 @@ namespace Sylvester
 {
     public class Matrix
     {
-        private readonly double[,] _matrix;
-        private readonly int _columns;
-        private readonly int _rows;
+        protected readonly double[,] _matrix;
+        protected readonly int _columns;
+        protected readonly int _rows;
 
         public Matrix(int rows, int columns)
         {
@@ -142,44 +142,7 @@ namespace Sylvester
         {
             return !lhs.Equals(rhs);
         }
-
-        public static Matrix operator |(Matrix lhs, Matrix rhs)
-        {
-            BooleanPrerequisites(lhs, rhs);
-            var m = new Matrix(lhs._rows, lhs._columns);
-            for (var i = 0; i < m._rows; i++)
-                for (var j = 0; j < m._columns; j++ )
-                    if (lhs.GetElement(i,j) == 1 || rhs.GetElement(i,j) == 1)
-                    {
-                        m.SetElement(i,j,1);
-                    }
-            return m;
-        }
         
-        public Matrix Join(Matrix rhs)
-        {
-            return this | rhs;
-        }
-
-        public static Matrix operator &(Matrix lhs, Matrix rhs)
-        {
-            BooleanPrerequisites(lhs, rhs);
-            var m = new Matrix(lhs._rows, lhs._columns);
-            for (var i = 0; i < m._rows; i++)
-                for (var j = 0; j < m._columns; j++)
-                    if ((lhs.GetElement(i, j) == 0 && rhs.GetElement(i, j) == 0) ||
-                        (lhs.GetElement(i, j) == 1 && rhs.GetElement(i, j) == 1))
-                    {
-                        m.SetElement(i, j, 1);
-                    }
-            return m;
-        }
-        
-        public Matrix Meet(Matrix rhs)
-        {
-            return this & rhs;
-        }
-
         public bool Equals(Matrix other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -235,29 +198,6 @@ namespace Sylvester
             return m;
         }
 
-        public Matrix Product(Matrix rhs)
-        {
-            if (CannotMultiply(this, rhs))
-            {
-                throw new InvalidOperationException("The columns of the lhs Matrix must match the rows of the rhs Matrix in order to perform this operation.");
-            }
-            var m = new Matrix(_rows, rhs._columns);
-            for (var i = 0; i < _rows; i++)
-            {
-                for (var j = 0; j < rhs._columns; j++)
-                {
-                    var row = GetRow(i);
-                    var column = rhs.GetColumn(j);
-                    var element = 0;
-                    for (var index = 0; index < row.Length; index++)
-                    {
-                        element |= (int)row[index] & (int)column[index];
-                    }
-                    m.SetElement(i, j, element);
-                }
-            }
-            return m;
-        }
 
         public bool IsSquare()
         {
@@ -296,7 +236,7 @@ namespace Sylvester
             return IsSquare() && this == Transpose();
         }
 
-        public bool IsBinary()
+        public bool IsBoolean()
         {
             for (var i = 0; i < _rows; i++)
                 for (var j = 0; j < _columns; j++)
@@ -310,14 +250,14 @@ namespace Sylvester
             return (lhs._rows == rhs._rows && lhs._columns == rhs._columns);
         }
 
-        private static bool CannotMultiply(Matrix lhs, Matrix rhs)
+        protected static bool CannotMultiply(Matrix lhs, Matrix rhs)
         {
             return (lhs._columns != rhs._rows);
         }
 
-        private static void BooleanPrerequisites(Matrix lhs, Matrix rhs)
+        protected static void BooleanPrerequisites(Matrix lhs, Matrix rhs)
         {
-            if (!lhs.IsBinary() || !rhs.IsBinary())
+            if (!lhs.IsBoolean() || !rhs.IsBoolean())
             {
                 throw new InvalidOperationException("The matrices must be binary in order to perform this operation.");
             }
