@@ -7,8 +7,6 @@
 hello_world() ->
     "hello world!".
 
-
 %%% EUNIT Tests
 hello_world_test() ->
-    "hello world!" =:= hello_world().
-
+    ?assert("hello world!" =:= hello_world()).
