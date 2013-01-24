@@ -1,7 +1,7 @@
 -module(matrix).
 
 -export([default/2,
-         %set_element/4,
+         set_element/4,
          get_element/3,
          print/0]).
 
@@ -12,14 +12,17 @@ default(Rows, Columns) when is_integer(Rows), is_integer(Columns) ->
 
 get_element(Row, Column, Matrix) ->
     lists:nth(Column, lists:nth(Row, Matrix)).
+
+set_element(1, Columns, Value, [H|T]) ->
+    [set_element_in_list(Columns, Value, H)|T];
+set_element(Rows, Columns, Value, [H|T]) ->
+    [H|set_element(Rows - 1, Columns, Value, T)].
     
-%set_element(0, 0, Value, [_H|T]) ->
-%    [Value|T];
-%set_element(0, Column, Value, [H|T]) ->
-%    [set_element(0, Column - 1, Value, T)| H];
-%set_element(Row, Column, Value, [H|T]) ->
-%    [set_element(Row - 1, Column, Value, T)| H].
-    
+set_element_in_list(1, Value, [_|T]) ->
+    [Value|T];
+set_element_in_list(Index, Value, [H|T]) ->
+    [H|set_element_in_list(Index - 1, Value, T)].
+
 %%% Internal Only    
 build_list(Size) ->
     build_list(Size, []).
@@ -44,7 +47,7 @@ append_list_to_matrix(Rows, List, Matrix) ->
     
     
 print() ->
-    io:format("~p", [get_element(2,2,[[1,2,3],[4,5,6],[7,8,9]])]).
+    io:format("TOP ~p", [set_element(2,2,0,[[1,2,3],[4,5,6],[7,8,9]])]).
 
 %%% EUNIT Tests
 default_has_all_zeros_test() ->
@@ -66,5 +69,6 @@ build_matrix_test() ->
 get_element_test() ->
     ?assert(5 =:= get_element(2, 2, [[1,2,3],[4,5,6],[7,8,9]])).
     
-%set_specific_element_test() ->
-%    ?assert([[0,0],[1,0]] =:= set_element(2, 1, 1, default(2,2))).
+set_specific_element_test() ->
+    ?assert([[0,0],[1,0]] =:= set_element(2, 1, 1, default(2,2))).
+    
